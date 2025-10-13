@@ -1,6 +1,6 @@
 const AuthService = require("../services/authService");
 const jwt = require("jsonwebtoken");
-const jwtConfig = require("../📂 config/jwtConfig");
+const jwtConfig = require("../config/jwtConfig");
 
 const authService = new AuthService();
 
@@ -21,7 +21,9 @@ exports.login = async (req, res) => {
       expiresIn: jwtConfig.expiresIn,
     });
 
-    res.status(200).json({ message: "Login exitoso ✅", user, token });
+    res
+      .status(200)
+      .json({ message: "Login exitoso ✅", user: user.username, token });
   } catch (err) {
     res
       .status(err.status || 500)

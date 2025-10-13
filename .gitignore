@@ -52,3 +52,6 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# Ignora el ENV
+.env

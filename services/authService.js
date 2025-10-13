@@ -1,31 +1,35 @@
-const mockUser = require("../mocks/authMock");
+const pool = require("../config/db");
+const bcrypt = require("bcryptjs");
 
 class AuthService {
-  constructor() {
-    this.mockUser = mockUser;
-  }
-
   // Validar login
-  validateLogin({ username, password }) {
-    return new Promise((resolve, reject) => {
-      try {
-        if (username !== this.mockUser.username) {
-          return reject({ status: 401, message: "Usuario no encontrado" });
-        }
+  async validateLogin({ username, password }) {
+    try {
+      // Buscar usuario en la DB
+      const res = await pool.query("SELECT * FROM users WHERE username = $1", [
+        username,
+      ]);
+      const user = res.rows[0];
 
-        const isMatch = require("bcryptjs").compareSync(
-          password,
-          this.mockUser.password
-        );
-        if (!isMatch) {
-          return reject({ status: 401, message: "Contraseña incorrecta" });
-        }
-
-        resolve({ username });
-      } catch (err) {
-        reject({ status: 500, message: "Error interno", error: err });
+      if (!user) {
+        throw { status: 401, message: "Usuario no encontrado" };
       }
-    });
+
+      // Verificar contraseña
+      const valid = bcrypt.compareSync(password, user.password);
+      if (!valid) {
+        throw { status: 401, message: "Contraseña incorrecta" };
+      }
+
+      // Retornar usuario válido
+      return user;
+    } catch (err) {
+      // Manejo de errores
+      if (!err.status) {
+        throw { status: 500, message: "Error interno", error: err };
+      }
+      throw err;
+    }
   }
 }
 
