@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const jwtConfig = require("../config/jwtConfig");
+/*const jwtConfig = require("../config/jwtConfig");*/
+require("dotenv").config();
 
 const authenticate = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -10,7 +11,7 @@ const authenticate = (req, res, next) => {
   if (!token) return res.status(401).json({ error: "Token inválido" });
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret);
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET_JWT);
     console.log("Contenido del token: ", decoded);
     req.user = decoded; // agregamos info del usuario a la request
     next();

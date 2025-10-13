@@ -1,6 +1,7 @@
 const AuthService = require("../services/authService");
 const jwt = require("jsonwebtoken");
-const jwtConfig = require("../config/jwtConfig");
+/*const jwtConfig = require("../config/jwtConfig");*/
+require("dotenv").config();
 
 const authService = new AuthService();
 
@@ -17,9 +18,13 @@ exports.login = async (req, res) => {
     const user = await authService.validateLogin({ username, password });
 
     // Generar JWT
-    const token = jwt.sign({ username: user.username }, jwtConfig.secret, {
-      expiresIn: jwtConfig.expiresIn,
-    });
+    const token = jwt.sign(
+      { username: user.username },
+      process.env.TOKEN_SECRET_JWT,
+      {
+        expiresIn: process.env.EXPIRATION_IN_JWT,
+      }
+    );
 
     res
       .status(200)
