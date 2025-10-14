@@ -4,36 +4,59 @@ const fs = require("fs");
 
 exports.create = async (req, res) => {
   try {
-    const personData = req.body;
+    const personData = req.body; // Campos del formulario
 
-    if (personData.photoPath) {
-      // ✅ Verificar que el archivo existe
-      if (!fs.existsSync(personData.photoPath)) {
-        return res.status(400).json({
-          error: "La ruta del archivo no existe: " + personData.photoPath,
-        });
-      }
+    // ⚡ Si se subió archivo
+    if (req.file) {
+      console.log("Archivo recibido:", req.file.path);
 
-      console.log("📤 Subiendo imagen desde:", personData.photoPath);
-
-      const result = await cloudinary.uploader.upload(personData.photoPath, {
+      const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "person_photos",
       });
 
-      console.log("✅ Subida exitosa:", result.secure_url);
-
-      // Guardar URL en DB
-      personData.photo = result.secure_url;
+      personData.photo = result.secure_url; // URL de Cloudinary
     }
 
-    // Crear registro en la DB
-    const newPerson = await personService.create(personData);
+    const newPerson = await personService.create(personData); // Guardar en DB
     res.status(201).json(newPerson);
   } catch (err) {
-    console.error("❌ Error al crear persona:", err);
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
+
+// exports.create = async (req, res) => {
+//   try {
+//     const personData = req.body;
+
+//     if (personData.photoPath) {
+//       // ✅ Verificar que el archivo existe
+//       if (!fs.existsSync(personData.photoPath)) {
+//         return res.status(400).json({
+//           error: "La ruta del archivo no existe: " + personData.photoPath,
+//         });
+//       }
+
+//       console.log("📤 Subiendo imagen desde:", personData.photoPath);
+
+//       const result = await cloudinary.uploader.upload(personData.photoPath, {
+//         folder: "person_photos",
+//       });
+
+//       console.log("✅ Subida exitosa:", result.secure_url);
+
+//       // Guardar URL en DB
+//       personData.photo = result.secure_url;
+//     }
+
+//     // Crear registro en la DB
+//     const newPerson = await personService.create(personData);
+//     res.status(201).json(newPerson);
+//   } catch (err) {
+//     console.error("❌ Error al crear persona:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 // 🔹 Actualizar persona
 exports.update = async (req, res) => {

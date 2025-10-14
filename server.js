@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
 const dashboardRoutes = require("./routes/dashboardRoute");
@@ -7,6 +8,15 @@ const pool = require("./config/db"); // si quieres verificar conexión
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Permitir CORS desde tu frontend
+app.use(
+  cors({
+    origin: "http://localhost:5173", // URL de tu React dev server
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // si vas a usar cookies
+  })
+);
 
 // Middleware para parsear JSON
 app.use(bodyParser.json());

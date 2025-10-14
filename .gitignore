@@ -55,3 +55,5 @@ Thumbs.db
 
 # Ignora el ENV
 .env
+
+temp_uploads/
