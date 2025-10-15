@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
-const dashboardRoutes = require("./routes/dashboardRoute");
 const personRoutes = require("./routes/personRoute");
 const pool = require("./config/db"); // si quieres verificar conexión
 
@@ -29,7 +28,6 @@ pool
 
 // Rutas principales
 app.use("/auth", authRoutes);
-app.use("/dashboard", dashboardRoutes);
 app.use("/api/person", personRoutes); // 👈 nueva ruta para CRUD de personas
 
 // Ruta 404 (debe ir después de las rutas válidas)
