@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
 const personRoutes = require("./routes/personRoute");
 const birthdayRoutes = require("./routes/birthdayRoute");
+const { checkBirthdays } = require("./jobs/birthdayJob");
 const pool = require("./config/db"); // si quieres verificar conexión
 
 const app = express();
@@ -32,6 +33,10 @@ pool
 app.use("/auth", authRoutes);
 app.use("/api/person", personRoutes); // 👈 nueva ruta para CRUD de personas
 app.use("/api/birthday", birthdayRoutes); // 👈 nueva ruta para CRUD de cumpleaños
+
+// Job de cumpleaños (ya se programa automáticamente)
+const { startBirthdayJob } = require("./jobs/birthdayJob");
+startBirthdayJob();
 
 // Ruta 404 (debe ir después de las rutas válidas)
 app.use((req, res) => {
