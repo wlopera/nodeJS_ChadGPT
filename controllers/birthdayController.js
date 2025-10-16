@@ -1,73 +1,73 @@
-const personService = require("../services/personService");
+const birthdayService = require("../services/birthdayService");
 const cloudinary = require("../config/cloudinary");
 
 exports.create = async (req, res) => {
   try {
-    const personData = req.body; // Campos del formulario
+    const birthdayData = req.body; // Campos del formulario
 
     // ⚡ Si se subió archivo
     if (req.file) {
       console.log("Archivo recibido:", req.file.path);
 
       const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "person_photos",
+        folder: "birthday_photos",
       });
 
-      personData.photo = result.secure_url; // URL de Cloudinary
+      birthdayData.image = result.secure_url; // URL de Cloudinary
     }
 
-    const newPerson = await personService.create(personData); // Guardar en DB
-    res.status(201).json(newPerson);
+    const newBirthday = await birthdayService.create(birthdayData); // Guardar en DB
+    res.status(201).json(newBirthday);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔹 Actualizar persona
+// 🔹 Actualizar birthday
 exports.update = async (req, res) => {
   try {
-    const personData = req.body;
+    const birthdayData = req.body;
     if (req.file) {
-      personData.photo = req.file.buffer;
+      birthdayData.photo = req.file.buffer;
     }
-    const updated = await personService.update(req.params.id, personData);
+    const updated = await birthdayService.update(req.params.id, birthdayData);
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔹 Consultar todas las personas
+// 🔹 Consultar todas las birthdays
 exports.getAll = async (req, res) => {
   try {
-    const data = await personService.getAll();
+    const data = await birthdayService.getAll();
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔹 Consultar persona por ID
+// 🔹 Consultar birthday por ID
 exports.getById = async (req, res) => {
   try {
-    const person = await personService.getById(req.params.id);
-    if (!person)
-      return res.status(404).json({ error: "Persona no encontrada" });
+    const birthday = await birthdayService.getById(req.params.id);
+    if (!birthday)
+      return res.status(404).json({ error: "birthday no encontrada" });
 
     // Si la foto está en binario, convertir a base64 (opcional)
-    if (person.photo) person.photo = person.photo.toString("base64");
+    if (birthday.photo) birthday.photo = birthday.photo.toString("base64");
 
-    res.json(person);
+    res.json(birthday);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔹 Eliminar persona
+// 🔹 Eliminar birthday
 exports.delete = async (req, res) => {
   try {
-    const result = await personService.delete(req.params.id);
+    const result = await birthdayService.delete(req.params.id);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -3,15 +3,17 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
 const personRoutes = require("./routes/personRoute");
+const birthdayRoutes = require("./routes/birthdayRoute");
 const pool = require("./config/db"); // si quieres verificar conexión
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const URL_CORS = process.env.URL_CORS;
 
 // Permitir CORS desde tu frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // URL de tu React dev server
+    origin: URL_CORS, // URL de tu React dev server
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // si vas a usar cookies
   })
@@ -29,6 +31,7 @@ pool
 // Rutas principales
 app.use("/auth", authRoutes);
 app.use("/api/person", personRoutes); // 👈 nueva ruta para CRUD de personas
+app.use("/api/birthday", birthdayRoutes); // 👈 nueva ruta para CRUD de cumpleaños
 
 // Ruta 404 (debe ir después de las rutas válidas)
 app.use((req, res) => {
