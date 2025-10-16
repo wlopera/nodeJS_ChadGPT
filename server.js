@@ -9,7 +9,7 @@ const pool = require("./config/db"); // si quieres verificar conexión
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const URL_CORS = process.env.URL_CORS;
+const URL_CORS = process.env.URL_CORS || "http://localhost:5173";
 
 // Permitir CORS desde tu frontend
 app.use(

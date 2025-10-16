@@ -41,7 +41,7 @@ async function checkBirthdays() {
  */
 function startBirthdayJob() {
   // "18 17 * * *" -> minuto 0, hora 18 (6:00 PM)
-  cron.schedule("20 18 * * *", () => {
+  cron.schedule("40 18 * * *", () => {
     console.log("🕗 Ejecutando job diario de cumpleaños...");
     checkBirthdays();
   });
