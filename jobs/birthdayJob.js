@@ -40,13 +40,15 @@ async function checkBirthdays() {
  * Programa el job para que se ejecute todos los días a las 8 AM
  */
 function startBirthdayJob() {
-  // "18 17 * * *" -> minuto 0, hora 18 (6:00 PM)
-  cron.schedule("40 18 * * *", () => {
-    console.log("🕗 Ejecutando job diario de cumpleaños...");
+  // Ejecutar todos los días a las 8:00 PM hora Panamá (1:00 AM UTC)
+  cron.schedule("0 1 * * *", () => {
+    console.log(
+      "🕗 Ejecutando job diario de cumpleaños a las 8:00 PM Panamá..."
+    );
     checkBirthdays();
   });
 
-  console.log("🎯 Job programado: todos los días a las 6:40 PM");
+  console.log("🎯 Job programado: todos los días a las 8:00 PM de Panamá");
 }
 
 /**
