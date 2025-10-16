@@ -46,7 +46,7 @@ function startBirthdayJob() {
     checkBirthdays();
   });
 
-  console.log("🎯 Job programado: todos los días a las 8:00 AM");
+  console.log("🎯 Job programado: todos los días a las 6:40 PM");
 }
 
 /**
