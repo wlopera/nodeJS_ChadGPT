@@ -64,6 +64,7 @@ function startBirthdayJob() {
 
   const serverTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const JOB_HH_CURRENT = serverTimeZone === "UTC" ? JOB_HH + 5 : JOB_HH;
+  console.log(111, JOB_HH_CURRENT);
 
   // Para cron: ejecuta todos los días a JOB_HH:JOB_MM hora Panamá
   cron.schedule(`${JOB_MM} ${JOB_HH_CURRENT} * * *`, () => {
