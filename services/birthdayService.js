@@ -2,16 +2,19 @@ const pool = require("../config/db");
 
 class BirthdayService {
   async getAll() {
+    console.log("Consultando todos los cumpleaños");
     const res = await pool.query("SELECT * FROM birthday ORDER BY id ASC");
     return res.rows;
   }
 
   async getById(id) {
+    console.log("Consultando Cumpleaño por id: ", id);
     const res = await pool.query("SELECT * FROM birthday WHERE id = $1", [id]);
     return res.rows[0];
   }
 
   async create({ name, date, email, phone, image }) {
+    console.log("Creando Cumpleaño, ", name);
     const res = await pool.query(
       `INSERT INTO birthday (name, date, email, phone, image)
        VALUES ($1, $2, $3, $4, $5)
@@ -22,6 +25,7 @@ class BirthdayService {
   }
 
   async update(id, { name, date, email, phone, image }) {
+    console.log("Modificando Cumpleaño, ", name);
     const res = await pool.query(
       `UPDATE birthday
        SET name = $1, date = $2, email = $3, phone = $4, image = $5
@@ -33,6 +37,7 @@ class BirthdayService {
   }
 
   async delete(id) {
+    console.log("Borrando Cumpleaño id: ", id);
     await pool.query("DELETE FROM birthday WHERE id = $1", [id]);
     return { message: "Cumpleaños eliminado correctamente" };
   }

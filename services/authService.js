@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 class AuthService {
   // Validar login
   async validateLogin({ username, password }) {
+    console.log("Validando usuario: ", username);
     try {
       // Buscar usuario en la DB
       const res = await pool.query("SELECT * FROM users WHERE username = $1", [
