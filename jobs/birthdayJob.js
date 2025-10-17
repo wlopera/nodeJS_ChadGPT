@@ -63,8 +63,12 @@ function startBirthdayJob() {
   });
 
   const serverTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const JOB_HH_CURRENT = serverTimeZone === "UTC" ? JOB_HH + 5 : JOB_HH;
-  console.log(111, JOB_HH_CURRENT);
+  let JOB_HH_CURRENT = serverTimeZone === "UTC" ? JOB_HH + 5 : JOB_HH;
+
+  // Si se pasa de las 24 horas
+  if (JOB_HH_CURRENT >= 24) JOB_HH_CURRENT -= 24;
+
+  console.log("Hora para Panamá - cron UTC: ", `${JOB_HH_CURRENT}:${JOB_MM}`);
 
   // Para cron: ejecuta todos los días a JOB_HH:JOB_MM hora Panamá
   cron.schedule(`${JOB_MM} ${JOB_HH_CURRENT} * * *`, () => {
