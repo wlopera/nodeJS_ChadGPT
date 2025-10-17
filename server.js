@@ -4,46 +4,45 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
 const personRoutes = require("./routes/personRoute");
 const birthdayRoutes = require("./routes/birthdayRoute");
-const { checkBirthdays } = require("./jobs/birthdayJob");
-const pool = require("./config/db"); // si quieres verificar conexión
+const { startBirthdayJob } = require("./jobs/birthdayJob");
+const pool = require("./config/db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const URL_CORS = process.env.URL_CORS || "http://localhost:5173";
 
-// Permitir CORS desde tu frontend
+// 🟢 Configuración CORS
 app.use(
   cors({
-    origin: URL_CORS, // URL de tu React dev server
+    origin: URL_CORS,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // si vas a usar cookies
+    credentials: true,
   })
 );
 
-// Middleware para parsear JSON
+// 🟢 Parsear JSON
 app.use(bodyParser.json());
 
-// ✅ Verificar conexión a PostgreSQL (opcional)
+// 🧩 Verificar conexión a PostgreSQL
 pool
   .connect()
   .then(() => console.log("✅ Conectado a PostgreSQL"))
   .catch((err) => console.error("❌ Error al conectar a PostgreSQL", err));
 
-// Rutas principales
+// 🧩 Rutas principales
 app.use("/auth", authRoutes);
-app.use("/api/person", personRoutes); // 👈 nueva ruta para CRUD de personas
-app.use("/api/birthday", birthdayRoutes); // 👈 nueva ruta para CRUD de cumpleaños
+app.use("/api/person", personRoutes);
+app.use("/api/birthday", birthdayRoutes);
 
-// Job de cumpleaños (ya se programa automáticamente)
-const { startBirthdayJob } = require("./jobs/birthdayJob");
+// 🕗 Iniciar job automático
 startBirthdayJob();
 
-// Ruta 404 (debe ir después de las rutas válidas)
+// 🚧 Ruta 404 (después de todas las rutas válidas)
 app.use((req, res) => {
   res.status(404).json({ error: "404 - Página no encontrada" });
 });
 
-// Iniciar servidor
+// 🚀 Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
