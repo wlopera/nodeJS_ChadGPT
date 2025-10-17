@@ -62,20 +62,17 @@ function startBirthdayJob() {
     hour12: true,
   });
 
+  const serverTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const JOB_HH_CURRENT = serverTimeZone === "UTC" ? JOB_HH + 5 : JOB_HH;
+
   // Para cron: ejecuta todos los días a JOB_HH:JOB_MM hora Panamá
-  cron.schedule(`${JOB_MM} ${JOB_HH} * * *`, () => {
-    const currentPanama = new Date().toLocaleTimeString(
-      "es-PA",
-      {
-        timeZone: "America/Panama",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      },
-      {
-        timezone: "America/Panama",
-      }
-    );
+  cron.schedule(`${JOB_MM} ${JOB_HH_CURRENT} * * *`, () => {
+    const currentPanama = new Date().toLocaleTimeString("es-PA", {
+      timeZone: "America/Panama",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
     console.log(
       `🕗 Ejecutando job diario de cumpleaños a las ${currentPanama} (hora Panamá)`
     );
